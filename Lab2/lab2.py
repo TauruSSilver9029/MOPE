@@ -126,7 +126,10 @@ class Experiment:
 
 
 if __name__ == '__main__':
-    m = 5
+    m = 11
+    if m>9 :
+        print('Невірні вхідні данні')
+        exit(0)
     X1_range = [15, 45]
     X2_range = [-15, 45]
     Y_range = [0, 100]
