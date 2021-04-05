@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import time
 from numpy.linalg import solve
 from scipy.stats import f, t
 from functools import partial
@@ -146,7 +147,7 @@ def main(n, m):
         print("Необхідно збільшити ксть дослідів")
         m += 1
         main(n, m)
-
+    time1 = float(time.time())
     ts = kriteriy_studenta(x_norm[:, 1:], y, y_aver, n, m)
     print('\nКритерій Стьюдента:\n', ts)
     res = [t for t in ts if t > t_student]
@@ -162,6 +163,7 @@ def main(n, m):
 
     d = len(res)
     f4 = n - d
+    time2 = float(time.time())
     F_p = kriteriy_fishera(y, y_aver, y_new, n, m, d)
 
     fisher = partial(f.ppf, q=1 - 0.05)
@@ -174,6 +176,7 @@ def main(n, m):
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним')
+    print("Час пошуку значимих коефіціентів", time2 - time1)
 
 
 if __name__ == '__main__':
