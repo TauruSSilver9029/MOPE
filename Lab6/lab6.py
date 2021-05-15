@@ -1,5 +1,5 @@
 from math import fabs, sqrt
-import time
+from time import time
 m = 2
 p = 0.95
 N = 15
@@ -24,8 +24,18 @@ d = None
 q = None
 f3 = None
 
+def timer_func(func):
+    def wrap_func(*args, **kwargs):
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time()
+        print(f'Метод {func.__name__!r} виконався за {(t2 - t1):.7f}s')
+        return result
+
+    return wrap_func
 
 class Perevirku:
+    @timer_func
     def get_cohren_value(size_of_selections, qty_of_selections, significance):
         from _pydecimal import Decimal
         from scipy.stats import f
@@ -36,11 +46,13 @@ class Perevirku:
         result = fisher / (fisher + (size_of_selections - 1 - 1))
         return Decimal(result).quantize(Decimal('.0001')).__float__()
 
+    @timer_func
     def get_student_value(f3, significance):
         from _pydecimal import Decimal
         from scipy.stats import t
         return Decimal(abs(t.ppf(significance / 2, f3))).quantize(Decimal('.0001')).__float__()
 
+    @timer_func
     def get_fisher_value(f3, f4, significance):
         from _pydecimal import Decimal
         from scipy.stats import f
@@ -50,8 +62,8 @@ class Perevirku:
 def generate_matrix():
     def f(X1, X2, X3):
         from random import randrange
-        y = 3.3 + 7.8 * X1 + 2.9 * X2 + 7.7 * X3 + 8.9 * X1 * X1 + 0.1 * X2 * X2 + 5.6 * X3 * X3 + 1.1 * X1 * X2 + \
-            0.9 * X1 * X3 + 1.1 * X2 * X3 + 2.7 * X1 * X2 * X3 + randrange(0, 10) - 5
+        y = 2.1 + 1.7 * X1 + 6.8 * X2 + 6.6 * X3 + 9.5 * X1 * X1 + 1.0 * X2 * X2 + 3.9 * X3 * X3 + 3.0 * X1 * X2 + \
+            0.1 * X1 * X3 + 4.5 * X2 * X3 + 1.8 * X1 * X2 * X3 + randrange(0, 10) - 5
         return y
 
     matrix_with_y = [[f(matrix_x[j][0], matrix_x[j][1], matrix_x[j][2]) for i in range(m)] for j in range(N)]
@@ -255,11 +267,11 @@ def run_experiment():
 
 
 if __name__ == '__main__':
-    start = time.time()
+    start = time()
     cnt = 0
     adekvat = 0
 
-    while (time.time() - start) <= 10:
+    while (time() - start) <= 10:
         cnt += 1
 
         try:
